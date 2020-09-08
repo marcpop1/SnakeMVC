@@ -1,0 +1,17 @@
+﻿.gridCol {
+    border: 1px solid black;
+    width: 30px;
+}
+
+.gridRow {
+    border: 1px solid black;
+    height: 30px;
+}
+
+#table {
+    text-align: -webkit-center;
+}
+
+.snake {
+    background-color: lightgreen;
+}
