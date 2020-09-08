@@ -6,9 +6,18 @@
 
         createGrid(height, width);
         spawnSnake();
+        debugger;
+
+        //setInterval(function () {
+        //    moveSnakeNew();
+        //}, 750);
+
         setInterval(function () {
-            moveSnake();
+            $(document).on("keydown", function (event) {
+                snakeController();
+            }); 
         }, 750);
+
     });
 
 
@@ -37,12 +46,14 @@
     var snakeTailX = 12;
     var snakeTailY = 15;
 
+    var snakeLength = 4;
+
     function spawnSnake() {
 
-        $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake");
-        $('.gridRow.13').children('.gridCol.12').addClass('snake');
-        $('.gridRow.14').children('.gridCol.12').addClass('snake');
-        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').addClass('snake');
+        $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake 1");
+        $('.gridRow.13').children('.gridCol.12').addClass('snake 2');
+        $('.gridRow.14').children('.gridCol.12').addClass('snake 3');
+        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').addClass('snake ' + snakeLength +'');
 
 
     }
@@ -67,6 +78,113 @@
             snakeHeadY = height;
         }
 
+    }
+
+    function moveSnakeNew() {
+
+        //$(document).on("keydown", function (event) {
+        //    var pressedKey = event.key;
+
+        //    if (pressedKey === "W" || pressedKey === "w") {
+        //        snakeHeadY--;
+        //    }
+        //    else if (pressedKey === "A" || pressedKey === "a") {
+        //        snakeHeadX--;
+        //    }
+        //    else if (pressedKey === "S" || pressedKey === "s") {
+        //        snakeHeadY++;
+        //    }
+        //    else if (pressedKey === "D" || pressedKey === "d") {
+        //        snakeHeadX++;
+        //    }
+
+        //    switch (pressedKey) {
+        //        case "w" || "W":
+                    
+        //    }
+
+        //});
+
+        $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake");
+        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').removeClass('snake');            
+        
+        if (snakeHeadY <= 0) {
+            snakeHeadY = height;
+        }
+        else if (snakeHeadY >= height) {
+            snakeHeadY = 0;
+        }
+        else if (snakeHeadX <= 0) {
+            snakeHeadX = width;
+        }
+        else if (snakeHeadX >= width) {
+            snakeHeadX = 0;
+        }
+
+        if ($('.gridRow.' + (snakeTailY-1) + '').children('.gridCol.' + snakeTailX + '').hasClass('snake')) {
+            snakeTailY--;
+        }
+        else if ($('.gridRow.' + (snakeTailY + 1) + '').children('.gridCol.' + snakeTailX + '').hasClass('snake')) {
+            snakeTailY++;
+        }
+        else if ($('.gridRow.' + snakeTailY + '').children('.gridCol.' + (snakeTailX - 1) + '').hasClass('snake')) {
+            snakeTailX--;
+        }
+        else if ($('.gridRow.' + snakeTailY + '').children('.gridCol.' + (snakeTailX + 1) + '').hasClass('snake')) {
+            snakeTailX++;
+        }
+        else if (snakeTailY === 0) {
+            snakeTailY = height - 1;
+        }
+        else if (snakeTailY === (height - 1)) {
+            snakeTailY = 0;
+        }
+        else if (snakeTailX === 0) {
+            snakeTailX = width - 1;
+        }
+        else if (snakeTailX === (width - 1)) {
+            snakeTailX = 0;
+        }
+
+    }
+
+    
+    function snakeController() {
+
+        var pressedKey = event.key;
+
+        switch (pressedKey) {
+            case "w" || "W":
+                setInterval(function () {
+                    snakeHeadY--;
+                    moveSnakeNew();
+                }, 750);
+                break;
+            case "a" || "A":
+                setInterval(function () {
+                    snakeHeadX--;
+                    moveSnakeNew();
+                }, 750);
+                break;
+            case "s" || "S":
+                setInterval(function () {
+                    snakeHeadY++;
+                    moveSnakeNew();
+                }, 750);
+                break;
+            case "d" || "D":
+                setInterval(function () {
+                    snakeHeadX++;
+                    moveSnakeNew();
+                }, 750);
+                break;
+            //default:
+            //    setInterval(function () {
+            //        snakeHeadY--;
+            //        moveSnakeNew();
+            //    }, 750);
+            //    break;
+        }
     }
 
 
