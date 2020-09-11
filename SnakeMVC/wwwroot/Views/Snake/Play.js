@@ -8,20 +8,10 @@
         spawnSnake();
         debugger;
 
-        //setInterval(function () {
-        //    moveSnakeNew();
-        //}, 750);
-
-        $(document).on("keydown", function (event) {
-            snakeController();
-        }); 
-
-        //setInterval(function () {
-            
-        //}, 750);
+        wrapper();
+        
 
     });
-
 
     function createGrid(height, width) {
 
@@ -42,6 +32,19 @@
 
     }
 
+    var timer;
+
+    function wrapper() {
+        $(document).on("keydown", function (event) {
+            debugger;
+            snakeController();
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                wrapper();
+            }, 800);
+        }).delay(800);
+    }
+
     var snakeHeadX = 12;
     var snakeHeadY = 12;
 
@@ -55,62 +58,16 @@
         $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake 1");
         $('.gridRow.13').children('.gridCol.12').addClass('snake 2');
         $('.gridRow.14').children('.gridCol.12').addClass('snake 3');
-        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').addClass('snake ' + snakeLength +'');
+        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').addClass('snake ' + snakeLength + '');
 
-
-    }
-
-    function moveSnake() {
-
-        if (snakeHeadY > 0) {
-            //debugger;
-            snakeHeadY--;
-            $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake");
-            $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').removeClass('snake');
-
-            if (snakeTailY > 0) {
-                snakeTailY--;
-            }
-            else if (snakeTailY === 0) {
-                snakeTailY = height - 1;
-            }
-
-        }
-        if (snakeHeadY <= 0) {
-            snakeHeadY = height;
-        }
 
     }
 
     var snakeBodyX;
     var snakeBodyY;
+    var isMoving = false;
 
     function moveSnakeNew(input) {
-
-        //$(document).on("keydown", function (event) {
-        //    var pressedKey = event.key;
-
-        //    if (pressedKey === "W" || pressedKey === "w") {
-        //        snakeHeadY--;
-        //    }
-        //    else if (pressedKey === "A" || pressedKey === "a") {
-        //        snakeHeadX--;
-        //    }
-        //    else if (pressedKey === "S" || pressedKey === "s") {
-        //        snakeHeadY++;
-        //    }
-        //    else if (pressedKey === "D" || pressedKey === "d") {
-        //        snakeHeadX++;
-        //    }
-
-        //    switch (pressedKey) {
-        //        case "w" || "W":
-                    
-        //    }
-
-        //});
-        //debugger;
-        //snakeHeadY--;
 
         if (input == 1) {
             snakeHeadY--;
@@ -124,10 +81,23 @@
         else if (input == 4) {
             snakeHeadX++;
         }
-        else if (input == null) {
+        else {
 
         }
+        
+        if (checkCollisionWithBody()) {
+            snakePerformMovement();
+        }
+        else {
+            debugger;
+            alert("Game Over");
+            location.reload();
+        }
+        
 
+    }
+
+    function snakePerformMovement() {
         $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake 1");
 
         snakeBodyX = snakeHeadX;
@@ -169,10 +139,10 @@
                 snakeBodyX++;
             }
         }
-        
 
-        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').removeClass('snake ' + snakeLength + '');            
-        
+
+        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').removeClass('snake ' + snakeLength + '');
+
         if (snakeHeadY <= 0) {
             snakeHeadY = height;
         }
@@ -210,7 +180,6 @@
         else if (snakeTailX === (width - 1)) {
             snakeTailX = 0;
         }
-
     }
 
     function checkLimit(input, limit) {
@@ -225,91 +194,97 @@
 
     }
 
-    
+    var snakeMovementIntervalTime = 650;
+    debugger;
+    var snakeMovement = setInterval(function () {
+        moveSnakeNew(snakeCurrentDirection);
+        isMoving = true;
+    }, snakeMovementIntervalTime);
+    clearInterval(snakeMovement);
+
+    var pressedKey;
+    var lastPressedKey;
+
+    var snakeDirections = {
+        Up: 1,
+        Left: 2,
+        Down: 3,
+        Right: 4,
+        Stop: 0
+    }
+
+    var snakeCurrentDirection = snakeDirections.Up;
+
     function snakeController() {
 
-        var pressedKey = event.key;
-        var snakeMovement = setInterval(function () {
-            moveSnakeNew();
-        }, 750);
         debugger;
 
-        switch (pressedKey) {
-            case "w" || "W":
-                clearInterval(snakeMovement);
-                snakeMovement = setInterval(function () {
-                    moveSnakeNew(1);
-                }, 750);
-                
-                break;
-            case "a" || "A":
-                clearInterval(snakeMovement);
-                snakeMovement = setInterval(function () {
-                    moveSnakeNew(2);
-                }, 750);
-                
-                break;
-            case "s" || "S":
-                clearInterval(snakeMovement);
-                snakeMovement = setInterval(function () {
-                    moveSnakeNew(3);
-                }, 750);
-                
-                break;
-            case "d" || "D":
-                clearInterval(snakeMovement);
-                snakeMovement = setInterval(function () {
-                    moveSnakeNew(4);
-                }, 750);
-                
-                break;
-            //default:
-            //    setInterval(function () {
-            //        snakeHeadY--;
-            //        moveSnakeNew();
-            //    }, 750);
-            //    break;
-        }
-    }
+        pressedKey = event.key;
 
-    function snakeControllerNew() {
+        if ((lastPressedKey != pressedKey) && snakeControllerRules() && !isMoving) {
 
-        var pressedKey = event.key;
+            switch (pressedKey.toLowerCase()) {
+                case "w":
+                    snakeCurrentDirection = snakeDirections.Up;
+                    snakeIntervalMovement();
+                    lastPressedKey = pressedKey;
+                    break;
+                case "a":
+                    snakeCurrentDirection = snakeDirections.Left;
+                    snakeIntervalMovement();
+                    lastPressedKey = pressedKey;
+                    break;
+                case "s":
+                    snakeCurrentDirection = snakeDirections.Down;
+                    snakeIntervalMovement();
+                    lastPressedKey = pressedKey;
+                    break;
+                case "d":
+                    snakeCurrentDirection = snakeDirections.Right;
+                    snakeIntervalMovement();
+                    lastPressedKey = pressedKey;
+                    break;
+            }
 
-        var snakeMovement;
-
-        if (pressedKey == "w" || pressedKey == "W") {
-            clearInterval(snakeMovement);
-            snakeMovement = setInterval(function () {
-                snakeHeadY--;
-                moveSnakeNew();
-            }, 750);
-        }
-        else if (pressedKey == "a" || pressedKey == "A") {
-            clearInterval(snakeMovement);
-            snakeMovement = setInterval(function () {
-                snakeHeadX--;
-                moveSnakeNew();
-            }, 750);
-        }
-        else if (pressedKey == "s" || pressedKey == "S") {
-            clearInterval(snakeMovement);
-            snakeMovement = setInterval(function () {
-                snakeHeadY++;
-                moveSnakeNew();
-            }, 750);
-        }
-        else if (pressedKey == "d" || pressedKey == "D") {
-            clearInterval(snakeMovement);
-            snakeMovement = setInterval(function () {
-                snakeHeadX++;
-                moveSnakeNew();
-            }, 750);
         }
 
-        //moveSnakeNew();
+        if (lastPressedKey != pressedKey) {
+            isMoving = false;
+        }
 
     }
 
+    function snakeIntervalMovement() {
+        clearInterval(snakeMovement);
+        snakeMovement = setInterval(function () {          
+            moveSnakeNew(snakeCurrentDirection);
+            isMoving = true;
+        }, snakeMovementIntervalTime);
+    }
+
+    function snakeControllerRules() {
+        if (lastPressedKey == "s" && pressedKey == "w") {
+            return false;
+        }
+        else if (lastPressedKey == "w" && pressedKey == "s") {
+            return false;
+        }
+        else if (lastPressedKey == "a" && pressedKey == "d") {
+            return false;
+        }
+        else if (lastPressedKey == "d" && pressedKey == "a") {
+            return false;
+        }
+        return true;
+    }
+
+    function checkCollisionWithBody() {
+
+        if ($('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').hasClass("snake")) {
+            return false;
+        }
+        return true;
+
+    }
 
 })
