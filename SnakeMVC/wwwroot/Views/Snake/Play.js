@@ -6,13 +6,56 @@
 
         createGrid(height, width);
         spawnSnake();
-        debugger;
-
-        wrapper();
         
+
+        $(document).on("keydown", function (event) {
+            if (!isMoving) {
+                isMoving = true;
+                snakeController();
+                isMoving = false;
+            }
+        });
+
+        snakeMovement = setInterval(function () {
+            moveSnakeNew(snakeCurrentDirection);
+        }, snakeMovementIntervalTime);
 
     });
 
+    var snakeHeadX = 12;
+    var snakeHeadY = 12;
+
+    var snakeTailX = 12;
+    var snakeTailY = 15;
+
+    var snakeLength = 4;
+
+    var snakeBodyX;
+    var snakeBodyY;
+
+    var snakeMovementIntervalTime = 650;
+
+    var snakeMovement = setInterval(function () {
+        moveSnakeNew(snakeCurrentDirection);
+    }, snakeMovementIntervalTime);
+    clearInterval(snakeMovement);
+
+    var pressedKey;
+    var lastPressedKey;
+
+    var snakeDirections = {
+        Up: 1,
+        Left: 2,
+        Down: 3,
+        Right: 4,
+        Stop: 0
+    }
+
+    var snakeCurrentDirection = snakeDirections.Up;
+
+    var isMoving;
+
+    // creates the grid with the (hardcoded) input values
     function createGrid(height, width) {
 
         $('#grid').remove();
@@ -32,27 +75,7 @@
 
     }
 
-    var timer;
-
-    function wrapper() {
-        $(document).on("keydown", function (event) {
-            debugger;
-            snakeController();
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                wrapper();
-            }, 800);
-        }).delay(800);
-    }
-
-    var snakeHeadX = 12;
-    var snakeHeadY = 12;
-
-    var snakeTailX = 12;
-    var snakeTailY = 15;
-
-    var snakeLength = 4;
-
+    // spawns the snake with the body length of 4
     function spawnSnake() {
 
         $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake 1");
@@ -63,10 +86,7 @@
 
     }
 
-    var snakeBodyX;
-    var snakeBodyY;
-    var isMoving = false;
-
+    // moves the snake based on input
     function moveSnakeNew(input) {
 
         if (input == 1) {
@@ -89,7 +109,6 @@
             snakePerformMovement();
         }
         else {
-            debugger;
             alert("Game Over");
             location.reload();
         }
@@ -97,7 +116,9 @@
 
     }
 
+    //performs the snakes movement
     function snakePerformMovement() {
+
         $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake 1");
 
         snakeBodyX = snakeHeadX;
@@ -180,8 +201,10 @@
         else if (snakeTailX === (width - 1)) {
             snakeTailX = 0;
         }
+
     }
 
+    // function that checks if an int reached its limit and resets it
     function checkLimit(input, limit) {
         if (input < 0) {
             input = limit - 1;
@@ -191,78 +214,47 @@
         }
 
         return input;
-
     }
 
-    var snakeMovementIntervalTime = 650;
-    debugger;
-    var snakeMovement = setInterval(function () {
-        moveSnakeNew(snakeCurrentDirection);
-        isMoving = true;
-    }, snakeMovementIntervalTime);
-    clearInterval(snakeMovement);
-
-    var pressedKey;
-    var lastPressedKey;
-
-    var snakeDirections = {
-        Up: 1,
-        Left: 2,
-        Down: 3,
-        Right: 4,
-        Stop: 0
-    }
-
-    var snakeCurrentDirection = snakeDirections.Up;
-
+    // listens to keyboard input and sets the snakes direction
     function snakeController() {
 
         debugger;
 
         pressedKey = event.key;
 
-        if ((lastPressedKey != pressedKey) && snakeControllerRules() && !isMoving) {
+        if (snakeControllerRules()) {
 
             switch (pressedKey.toLowerCase()) {
                 case "w":
                     snakeCurrentDirection = snakeDirections.Up;
-                    snakeIntervalMovement();
                     lastPressedKey = pressedKey;
                     break;
                 case "a":
                     snakeCurrentDirection = snakeDirections.Left;
-                    snakeIntervalMovement();
                     lastPressedKey = pressedKey;
                     break;
                 case "s":
                     snakeCurrentDirection = snakeDirections.Down;
-                    snakeIntervalMovement();
                     lastPressedKey = pressedKey;
                     break;
                 case "d":
                     snakeCurrentDirection = snakeDirections.Right;
-                    snakeIntervalMovement();
                     lastPressedKey = pressedKey;
                     break;
             }
 
         }
 
-        if (lastPressedKey != pressedKey) {
-            isMoving = false;
+    }
+
+    // checks if the keyboard input is correct to perform the movement
+    function snakeControllerRules() {
+
+        if (lastPressedKey == pressedKey) {
+            return false;
         }
 
-    }
-
-    function snakeIntervalMovement() {
-        clearInterval(snakeMovement);
-        snakeMovement = setInterval(function () {          
-            moveSnakeNew(snakeCurrentDirection);
-            isMoving = true;
-        }, snakeMovementIntervalTime);
-    }
-
-    function snakeControllerRules() {
         if (lastPressedKey == "s" && pressedKey == "w") {
             return false;
         }
@@ -275,9 +267,24 @@
         else if (lastPressedKey == "d" && pressedKey == "a") {
             return false;
         }
+
+        if (snakeCurrentDirection == snakeDirections.Down && pressedKey == "w") {
+            return false;
+        }
+        else if (snakeCurrentDirection == snakeDirections.Up && pressedKey == "s") {
+            return false;
+        }
+        else if (snakeCurrentDirection == snakeDirections.Left && pressedKey == "d") {
+            return false;
+        }
+        else if (snakeCurrentDirection == snakeDirections.Right && pressedKey == "a") {
+            return false;
+        }
+
         return true;
     }
 
+    // checks for collision with the snakes body
     function checkCollisionWithBody() {
 
         if ($('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').hasClass("snake")) {
