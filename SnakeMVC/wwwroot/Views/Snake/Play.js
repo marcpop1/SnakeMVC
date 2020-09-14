@@ -8,13 +8,13 @@
         spawnSnake();
         
 
-        $(document).on("keydown", function (event) {
-            if (!isMoving) {
-                isMoving = true;
-                snakeController();
-                isMoving = false;
-            }
-        });
+        if (!isMoving) {
+            $(document).on("keydown", function (event) {
+                if (!isMoving) {
+                    snakeController();
+                }
+            });
+        }
 
         snakeMovement = setInterval(function () {
             moveSnakeNew(snakeCurrentDirection);
@@ -89,6 +89,8 @@
     // moves the snake based on input
     function moveSnakeNew(input) {
 
+        isMoving = true;
+
         if (input == 1) {
             snakeHeadY--;
         }
@@ -105,19 +107,23 @@
 
         }
         
-        if (checkCollisionWithBody()) {
+        if (!snakeCollisionWithBodyTrue()) {
             snakePerformMovement();
         }
         else {
             alert("Game Over");
             location.reload();
         }
-        
+
+        isMoving = false;
 
     }
 
     //performs the snakes movement
     function snakePerformMovement() {
+
+        snakeHeadX = checkLimit(snakeHeadX, width);
+        snakeHeadY = checkLimit(snakeHeadY, height);
 
         $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake 1");
 
@@ -126,18 +132,8 @@
 
         for (i = 1; i < snakeLength; i++) {
 
-            if (snakeBodyY < 0) {
-                snakeBodyY = height - 1;
-            }
-            else if (snakeBodyY > (height - 1)) {
-                snakeBodyY = 0;
-            }
-            else if (snakeBodyX < 0) {
-                snakeBodyX = width - 1;
-            }
-            else if (snakeBodyX > (width - 1)) {
-                snakeBodyX = 0;
-            }
+            snakeBodyX = checkLimit(snakeBodyX, width);
+            snakeBodyY = checkLimit(snakeBodyY, height);
 
             if ($('.gridRow.' + (checkLimit(snakeBodyY - 1, height)) + '').children('.gridCol.' + snakeBodyX + '').hasClass('snake ' + i + '')) {
                 $('.gridRow.' + (checkLimit(snakeBodyY - 1, height)) + '').children('.gridCol.' + snakeBodyX + '').removeClass('' + i + '');
@@ -161,56 +157,23 @@
             }
         }
 
-
         $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').removeClass('snake ' + snakeLength + '');
 
-        if (snakeHeadY <= 0) {
-            snakeHeadY = height;
-        }
-        else if (snakeHeadY >= height) {
-            snakeHeadY = 0;
-        }
-        else if (snakeHeadX <= 0) {
-            snakeHeadX = width;
-        }
-        else if (snakeHeadX >= width) {
-            snakeHeadX = 0;
-        }
-
-        if ($('.gridRow.' + (snakeTailY - 1) + '').children('.gridCol.' + snakeTailX + '').hasClass('snake ' + snakeLength + '')) {
-            snakeTailY--;
-        }
-        else if ($('.gridRow.' + (snakeTailY + 1) + '').children('.gridCol.' + snakeTailX + '').hasClass('snake ' + snakeLength + '')) {
-            snakeTailY++;
-        }
-        else if ($('.gridRow.' + snakeTailY + '').children('.gridCol.' + (snakeTailX - 1) + '').hasClass('snake ' + snakeLength + '')) {
-            snakeTailX--;
-        }
-        else if ($('.gridRow.' + snakeTailY + '').children('.gridCol.' + (snakeTailX + 1) + '').hasClass('snake ' + snakeLength + '')) {
-            snakeTailX++;
-        }
-        else if (snakeTailY === 0) {
-            snakeTailY = height - 1;
-        }
-        else if (snakeTailY === (height - 1)) {
-            snakeTailY = 0;
-        }
-        else if (snakeTailX === 0) {
-            snakeTailX = width - 1;
-        }
-        else if (snakeTailX === (width - 1)) {
-            snakeTailX = 0;
-        }
+        snakeTailX = checkLimit(snakeBodyX, width);
+        snakeTailY = checkLimit(snakeBodyY, height);
 
     }
 
     // function that checks if an int reached its limit and resets it
     function checkLimit(input, limit) {
+        var diff;
         if (input < 0) {
-            input = limit - 1;
+            diff = Math.abs(0 - input);
+            input = limit - diff;
         }
-        else if (input > (limit - 1)) {
-            input = 0;
+        else if (input >= limit) {
+            diff = Math.abs(limit - input);
+            input = diff;
         }
 
         return input;
@@ -285,12 +248,12 @@
     }
 
     // checks for collision with the snakes body
-    function checkCollisionWithBody() {
+    function snakeCollisionWithBodyTrue() {
 
         if ($('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').hasClass("snake")) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
 
     }
 
