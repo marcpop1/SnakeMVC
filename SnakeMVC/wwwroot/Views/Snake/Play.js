@@ -250,7 +250,7 @@
     // checks for collision with the snakes body
     function snakeCollisionWithBodyTrue() {
 
-        if ($('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').hasClass("snake")) {
+        if ($('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').hasClass('snake')) {
             return true;
         }
         return false;
