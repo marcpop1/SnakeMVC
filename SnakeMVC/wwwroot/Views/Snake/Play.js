@@ -4,6 +4,10 @@
 
     $('#submitButton').on("click", function () {
 
+        debugger;
+
+        snakeShowScore();
+
         createGrid(height, width);
         spawnSnake();
         
@@ -15,6 +19,8 @@
                 }
             });
         }
+
+        appleRandomSpawn();
 
         snakeMovement = setInterval(function () {
             moveSnakeNew(snakeCurrentDirection);
@@ -33,7 +39,7 @@
     var snakeBodyX;
     var snakeBodyY;
 
-    var snakeMovementIntervalTime = 650;
+    var snakeMovementIntervalTime = 300;
 
     var snakeMovement = setInterval(function () {
         moveSnakeNew(snakeCurrentDirection);
@@ -54,6 +60,14 @@
     var snakeCurrentDirection = snakeDirections.Up;
 
     var isMoving;
+
+    var applePositionX;
+    var applePositionY;
+
+    var min = 0;
+    var max = height - 1;
+
+    let score = 0;
 
     // creates the grid with the (hardcoded) input values
     function createGrid(height, width) {
@@ -78,10 +92,10 @@
     // spawns the snake with the body length of 4
     function spawnSnake() {
 
-        $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake 1");
-        $('.gridRow.13').children('.gridCol.12').addClass('snake 2');
-        $('.gridRow.14').children('.gridCol.12').addClass('snake 3');
-        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').addClass('snake ' + snakeLength + '');
+        $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake s1");
+        $('.gridRow.13').children('.gridCol.12').addClass('snake s2');
+        $('.gridRow.14').children('.gridCol.12').addClass('snake s3');
+        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').addClass('snake s' + snakeLength + '');
 
 
     }
@@ -106,13 +120,14 @@
         else {
 
         }
-        
+
         if (!snakeCollisionWithBodyTrue()) {
             snakePerformMovement();
         }
         else {
             alert("Game Over");
             location.reload();
+            score = 0;
         }
 
         isMoving = false;
@@ -122,10 +137,12 @@
     //performs the snakes movement
     function snakePerformMovement() {
 
+        
+
         snakeHeadX = checkLimit(snakeHeadX, width);
         snakeHeadY = checkLimit(snakeHeadY, height);
 
-        $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake 1");
+        $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake s1");
 
         snakeBodyX = snakeHeadX;
         snakeBodyY = snakeHeadY;
@@ -135,32 +152,38 @@
             snakeBodyX = checkLimit(snakeBodyX, width);
             snakeBodyY = checkLimit(snakeBodyY, height);
 
-            if ($('.gridRow.' + (checkLimit(snakeBodyY - 1, height)) + '').children('.gridCol.' + snakeBodyX + '').hasClass('snake ' + i + '')) {
-                $('.gridRow.' + (checkLimit(snakeBodyY - 1, height)) + '').children('.gridCol.' + snakeBodyX + '').removeClass('' + i + '');
-                $('.gridRow.' + (checkLimit(snakeBodyY - 1, height)) + '').children('.gridCol.' + snakeBodyX + '').addClass('' + (i + 1) + '');
+            if ($('.gridRow.' + (checkLimit(snakeBodyY - 1, height)) + '').children('.gridCol.' + snakeBodyX + '').hasClass('snake s' + i + '')) {
+                $('.gridRow.' + (checkLimit(snakeBodyY - 1, height)) + '').children('.gridCol.' + snakeBodyX + '').removeClass('s' + i + '');
+                $('.gridRow.' + (checkLimit(snakeBodyY - 1, height)) + '').children('.gridCol.' + snakeBodyX + '').addClass('s' + (i + 1) + '');
                 snakeBodyY--;
             }
-            else if ($('.gridRow.' + (checkLimit(snakeBodyY + 1, height)) + '').children('.gridCol.' + snakeBodyX + '').hasClass('snake ' + i + '')) {
-                $('.gridRow.' + (checkLimit(snakeBodyY + 1, height)) + '').children('.gridCol.' + snakeBodyX + '').removeClass('' + i + '');
-                $('.gridRow.' + (checkLimit(snakeBodyY + 1, height)) + '').children('.gridCol.' + snakeBodyX + '').addClass('' + (i + 1) + '');
+            else if ($('.gridRow.' + (checkLimit(snakeBodyY + 1, height)) + '').children('.gridCol.' + snakeBodyX + '').hasClass('snake s' + i + '')) {
+                $('.gridRow.' + (checkLimit(snakeBodyY + 1, height)) + '').children('.gridCol.' + snakeBodyX + '').removeClass('s' + i + '');
+                $('.gridRow.' + (checkLimit(snakeBodyY + 1, height)) + '').children('.gridCol.' + snakeBodyX + '').addClass('s' + (i + 1) + '');
                 snakeBodyY++;
             }
-            else if ($('.gridRow.' + snakeBodyY + '').children('.gridCol.' + (checkLimit(snakeBodyX - 1, width)) + '').hasClass('snake ' + i + '')) {
-                $('.gridRow.' + (snakeBodyY) + '').children('.gridCol.' + (checkLimit(snakeBodyX - 1, width)) + '').removeClass('' + i + '');
-                $('.gridRow.' + (snakeBodyY) + '').children('.gridCol.' + (checkLimit(snakeBodyX - 1, width)) + '').addClass('' + (i + 1) + '');
+            else if ($('.gridRow.' + snakeBodyY + '').children('.gridCol.' + (checkLimit(snakeBodyX - 1, width)) + '').hasClass('snake s' + i + '')) {
+                $('.gridRow.' + (snakeBodyY) + '').children('.gridCol.' + (checkLimit(snakeBodyX - 1, width)) + '').removeClass('s' + i + '');
+                $('.gridRow.' + (snakeBodyY) + '').children('.gridCol.' + (checkLimit(snakeBodyX - 1, width)) + '').addClass('s' + (i + 1) + '');
                 snakeBodyX--;
             }
-            else if ($('.gridRow.' + snakeBodyY + '').children('.gridCol.' + (checkLimit(snakeBodyX + 1, width)) + '').hasClass('snake ' + i + '')) {
-                $('.gridRow.' + (snakeBodyY) + '').children('.gridCol.' + (checkLimit(snakeBodyX + 1, width)) + '').removeClass('' + i + '');
-                $('.gridRow.' + (snakeBodyY) + '').children('.gridCol.' + (checkLimit(snakeBodyX + 1, width)) + '').addClass('' + (i + 1) + '');
+            else if ($('.gridRow.' + snakeBodyY + '').children('.gridCol.' + (checkLimit(snakeBodyX + 1, width)) + '').hasClass('snake s' + i + '')) {
+                $('.gridRow.' + (snakeBodyY) + '').children('.gridCol.' + (checkLimit(snakeBodyX + 1, width)) + '').removeClass('s' + i + '');
+                $('.gridRow.' + (snakeBodyY) + '').children('.gridCol.' + (checkLimit(snakeBodyX + 1, width)) + '').addClass('s' + (i + 1) + '');
                 snakeBodyX++;
             }
         }
 
-        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').removeClass('snake ' + snakeLength + '');
+        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').removeClass('snake s' + snakeLength + '');
 
         snakeTailX = checkLimit(snakeBodyX, width);
         snakeTailY = checkLimit(snakeBodyY, height);
+
+        if (appleCollisionTrue()) {
+            snakeLength++;
+            $('.gridRow.' + applePositionY + '').children('.gridCol.' + applePositionX + '').removeClass('apple');
+            appleRandomSpawn();
+        }
 
     }
 
@@ -254,6 +277,46 @@
             return true;
         }
         return false;
+
+    }
+
+    // checks if collision with apple is true
+    function appleCollisionTrue() {
+
+        if ($('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').hasClass('apple')) {
+            score++;
+            snakeShowScore();
+            return true;
+        }
+        return false;
+
+    }
+
+    // spawns the apple randomly on the map
+    function appleRandomSpawn() {
+
+        appleRandomizePosition();
+        
+        if (!$('.gridRow.' + applePositionY + '').children('.gridCol.' + applePositionX + '').hasClass('snake')) {
+            $('.gridRow.' + applePositionY + '').children('.gridCol.' + applePositionX + '').addClass('apple');
+        }
+        else {
+            appleRandomSpawn();
+        }
+
+    }
+
+    // randomizes the apple's position
+    function appleRandomizePosition() {
+        applePositionX = Math.floor(Math.random() * (max - min + 1)) + min;
+        applePositionY = Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // shows and updates the snake's score
+    function snakeShowScore() {
+
+        $('.score').remove();
+        $("#main").append('<h1 class="text-center score">Score: ' + score + '</h1>');
 
     }
 
