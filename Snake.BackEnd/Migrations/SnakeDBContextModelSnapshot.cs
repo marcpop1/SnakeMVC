@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SnakeMVC.Models;
+using Snake.BackEnd;
 
-namespace SnakeMVC.Migrations
+namespace Snake.BackEnd.Migrations
 {
     [DbContext(typeof(SnakeDBContext))]
     partial class SnakeDBContextModelSnapshot : ModelSnapshot
@@ -18,7 +18,7 @@ namespace SnakeMVC.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("SnakeMVC.Models.Snake", b =>
+            modelBuilder.Entity("Snake.BackEnd.Models.Apple", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -31,8 +31,35 @@ namespace SnakeMVC.Migrations
                     b.Property<int>("ApplePositionY")
                         .HasColumnType("int");
 
+                    b.HasKey("ID");
+
+                    b.ToTable("Apple");
+                });
+
+            modelBuilder.Entity("Snake.BackEnd.Models.Game", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
                     b.Property<int>("Score")
                         .HasColumnType("int");
+
+                    b.Property<int>("SnakeLength")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Game");
+                });
+
+            modelBuilder.Entity("Snake.BackEnd.Models.Snake", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("SnakeBodyPositionX")
                         .HasColumnType("int");
@@ -42,7 +69,7 @@ namespace SnakeMVC.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Snakes");
+                    b.ToTable("Snake");
                 });
 #pragma warning restore 612, 618
         }

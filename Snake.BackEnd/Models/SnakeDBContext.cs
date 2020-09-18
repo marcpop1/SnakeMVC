@@ -1,30 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Snake.BackEnd.Models;
 
-namespace SnakeMVC.Models
+namespace Snake.BackEnd
 {
-    public class Snake
-    {
-        public int ID { get; set; }
-        public int SnakeBodyPositionX { get; set; }
-        public int SnakeBodyPositionY { get; set; }
-        public int ApplePositionX { get; set; }
-        public int ApplePositionY { get; set; }
-        public int Score { get; set; }
-
-    }
-
     public class SnakeDBContext : DbContext
     {
         public SnakeDBContext(DbContextOptions<SnakeDBContext> options)
             : base(options)
         {
         }
-        public DbSet<Snake> Snakes { get; set; }
+
+        public DbSet<Models.Snake> Snake { get; set; }
+        public DbSet<Apple> Apple { get; set; }
+        public DbSet<Game> Game { get; set; }
+
     }
 
     public class SnakeDBContextFactory : IDesignTimeDbContextFactory<SnakeDBContext>
@@ -37,5 +30,4 @@ namespace SnakeMVC.Models
             return new SnakeDBContext(optionsBuilder.Options);
         }
     }
-
 }

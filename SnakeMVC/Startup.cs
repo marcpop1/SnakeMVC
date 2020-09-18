@@ -10,7 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SnakeMVC.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Snake.BackEnd;
+using Snake.BackEnd.Managers;
 
 namespace SnakeMVC
 {
@@ -28,9 +29,9 @@ namespace SnakeMVC
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<SnakeDBContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("SnakeDBContext")));
+            services.RegisterDataServices(Configuration);
 
+            services.AddTransient<ISnakeManager, SnakeManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

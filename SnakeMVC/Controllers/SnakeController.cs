@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Snake.BackEnd.Managers;
 
 namespace SnakeMVC.Controllers
 {
@@ -12,5 +13,13 @@ namespace SnakeMVC.Controllers
         {
             return View();
         }
+
+        private ISnakeManager _snakeManager;
+
+        public SnakeController(ISnakeManager snakeManager)
+        {
+            _snakeManager = snakeManager;
+        }
+
     }
 }

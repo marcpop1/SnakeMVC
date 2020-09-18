@@ -23,8 +23,20 @@
         appleRandomSpawn();
 
         snakeMovement = setInterval(function () {
-            moveSnakeNew(snakeCurrentDirection);
+            if (!gameIsPaused) {
+                moveSnakeNew(snakeCurrentDirection);
+            }
         }, snakeMovementIntervalTime);
+
+        $(document).on("keydown", function (event) {
+            snakePauseGame();
+            showOrHidePauseModal();
+        });
+
+        $('#resumeButton').on('click', function () {
+            gameIsPaused = false;
+            showOrHidePauseModal();
+        });
 
     });
 
@@ -68,6 +80,9 @@
     var max = height - 1;
 
     let score = 0;
+
+    var gameIsPaused = false;
+
 
     // creates the grid with the (hardcoded) input values
     function createGrid(height, width) {
@@ -319,5 +334,36 @@
         $("#main").append('<h1 class="text-center score">Score: ' + score + '</h1>');
 
     }
+
+    function snakePauseGame() {
+
+        var pauseKey = event.key;
+        debugger;
+        if (pauseKey == "Escape") {
+
+            if (!gameIsPaused) {
+                gameIsPaused = true;
+            }
+            else if (gameIsPaused) {
+                gameIsPaused = false;
+            }
+
+        }
+
+    }
+
+    function showOrHidePauseModal() {
+        if (gameIsPaused) {
+            $('body').addClass('gamePausedTable');
+
+            $('#pauseModal').css('display', 'block');
+        }
+        else if (!gameIsPaused) {
+            $('body').removeClass('gamePausedTable');
+
+            $('#pauseModal').css('display', 'none');
+        }
+    }
+
 
 })
