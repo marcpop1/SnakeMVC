@@ -7,11 +7,11 @@ namespace Snake.BackEnd.Managers
     public class SnakeManager : ISnakeManager
     {
 
-        private readonly SnakeDBContext _context;
+        private readonly SnakeDBContext db;
 
         public SnakeManager(SnakeDBContext context)
         {
-            _context = context;
+            db = context;
         }
 
         public List<Models.Snake> Get()
@@ -19,7 +19,7 @@ namespace Snake.BackEnd.Managers
             throw new NotImplementedException();
         }
 
-        public List<Models.Snake> Set()
+        public List<Models.Snake> SetSnakeBody()
         {
             throw new NotImplementedException();
         }

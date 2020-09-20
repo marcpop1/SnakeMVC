@@ -9,7 +9,7 @@ namespace Snake.BackEnd.Managers
     {
         List<Models.Snake> Get();
 
-        List<Models.Snake> Set();
+        List<Models.Snake> SetSnakeBody();
 
     }
 }
