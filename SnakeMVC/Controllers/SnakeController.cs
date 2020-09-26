@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Snake.BackEnd.Managers;
+using Snake.BackEnd.Dtos;
+using Snake.BackEnd.IManagers;
+
 
 namespace SnakeMVC.Controllers
 {
@@ -21,7 +23,10 @@ namespace SnakeMVC.Controllers
             _snakeManager = snakeManager;
         }
 
-        
+        public void SaveGame (GameDto gameInput)
+        {
+            
+        }
 
     }
 }

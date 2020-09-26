@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Snake.BackEnd.Models;
 
-namespace Snake.BackEnd.Managers
+namespace Snake.BackEnd.IManagers
 {
     public interface ISnakeManager
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Snake.BackEnd.IManagers;
 
 namespace Snake.BackEnd.Managers
 {
