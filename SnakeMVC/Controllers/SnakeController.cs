@@ -23,9 +23,10 @@ namespace SnakeMVC.Controllers
             _snakeManager = snakeManager;
         }
 
-        public void SaveGame (GameDto gameInput)
+        [HttpGet]
+        public IActionResult SaveGame(GameDto gameInput)
         {
-            
+            return View("Play");
         }
 
     }

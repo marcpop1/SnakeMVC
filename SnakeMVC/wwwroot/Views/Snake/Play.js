@@ -38,6 +38,23 @@
             showOrHidePauseModal();
         });
 
+        $("#saveGameButton").on("click", function () {
+            debugger;
+            $.ajax({
+                url: '@Url.Action("SaveGame", "Controllers/Snake")',
+                data: { "gameInput.Score": score },
+                type: "post",
+                cache: false,
+                success: function () {
+                    alert("Game Saved Successfully!");
+                    location.reload();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert("Some error occurred");
+                }
+            });
+        })
+
     });
 
     var snakeHeadX = 12;
@@ -335,6 +352,7 @@
 
     }
 
+    // if escape key is pressed game gets paused/unpaused
     function snakePauseGame() {
 
         var pauseKey = event.key;
@@ -352,6 +370,7 @@
 
     }
 
+    // if game is paused/unpaused modal is shown/unshown
     function showOrHidePauseModal() {
         if (gameIsPaused) {
             $('body').addClass('gamePausedTable');
@@ -364,6 +383,7 @@
             $('#pauseModal').css('display', 'none');
         }
     }
+
 
 
 })
