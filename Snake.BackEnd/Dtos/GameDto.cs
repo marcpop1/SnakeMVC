@@ -9,6 +9,7 @@ namespace Snake.BackEnd.Dtos
         public SnakeBodyDto SnakeBody { get; set; }
         public AppleDto Apple { get; set; }
         public int Score { get; set; }
+        public int SnakeLength { get; set; }
 
     }
 }

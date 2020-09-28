@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Snake.BackEnd.Dtos;
 using Snake.BackEnd.IManagers;
-
+using Snake.BackEnd.Models;
 
 namespace SnakeMVC.Controllers
 {
@@ -23,10 +23,14 @@ namespace SnakeMVC.Controllers
             _snakeManager = snakeManager;
         }
 
-        [HttpGet]
-        public IActionResult SaveGame(GameDto gameInput)
-        {
-            return View("Play");
+        [HttpPost]
+        public GameDto SaveGame([FromBody] GameDto gameInput)
+        { 
+
+            _snakeManager.SetScore(gameInput);
+
+            return gameInput;
+
         }
 
     }

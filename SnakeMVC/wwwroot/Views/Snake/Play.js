@@ -2,9 +2,8 @@
     var height = $('#gridHeight').val();
     var width = $('#gridWidth').val();
 
-    $('#submitButton').on("click", function () {
 
-        debugger;
+    $('#submitButton').on("click", function () {
 
         snakeShowScore();
 
@@ -40,17 +39,21 @@
 
         $("#saveGameButton").on("click", function () {
             debugger;
+            var game = { "gameInput.Score": score, "gameInput.SnakeLength": snakeLength };
             $.ajax({
-                url: '@Url.Action("SaveGame", "Controllers/Snake")',
-                data: { "gameInput.Score": score },
-                type: "post",
+                url: '/Snake/SaveGame',
+                dataType: "json",
+                data: game,
+                type: "POST",
                 cache: false,
                 success: function () {
+                    debugger;
                     alert("Game Saved Successfully!");
                     location.reload();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert("Some error occurred");
+                    console.log(xhr, ajaxOptions, thrownError);
                 }
             });
         })
@@ -237,8 +240,6 @@
     // listens to keyboard input and sets the snakes direction
     function snakeController() {
 
-        debugger;
-
         pressedKey = event.key;
 
         if (snakeControllerRules()) {
@@ -356,7 +357,7 @@
     function snakePauseGame() {
 
         var pauseKey = event.key;
-        debugger;
+
         if (pauseKey == "Escape") {
 
             if (!gameIsPaused) {
