@@ -39,7 +39,10 @@
 
         $("#saveGameButton").on("click", function () {
             debugger;
-            var game = { "gameInput.Score": score, "gameInput.SnakeLength": snakeLength };
+
+            var apple = { "ApplePositionX": applePositionX, "ApplePositionY": applePositionY };
+
+            var game = { "gameInput.Score": score, "gameInput.SnakeLength": snakeLength, "gameInput.Apple": apple };
             $.ajax({
                 url: '/Snake/SaveGame',
                 type: "POST",
@@ -104,6 +107,8 @@
 
     var gameIsPaused = false;
 
+    var snakeBodyPositionsXY = { "SnakeBodyPositionX", "SnakeBodyPositionY" };
+    var snakeBody = [];
 
     // creates the grid with the (hardcoded) input values
     function createGrid(height, width) {
@@ -386,6 +391,12 @@
         }
     }
 
+    function setSnakeBody() {
 
+        for (int i = 0; i < snakeLength; i++) {
+            
+        }
+
+    }
 
 })
