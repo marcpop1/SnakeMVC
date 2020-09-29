@@ -23,13 +23,14 @@ namespace SnakeMVC.Controllers
             _snakeManager = snakeManager;
         }
 
+        [Route("Snake/SaveGame")]
         [HttpPost]
-        public GameDto SaveGame([FromBody] GameDto gameInput)
+        public JsonResult SaveGame([FromBody] GameDto gameInput)
         { 
 
             _snakeManager.SetScore(gameInput);
 
-            return gameInput;
+            return Json(gameInput);
 
         }
 

@@ -42,9 +42,10 @@
             var game = { "gameInput.Score": score, "gameInput.SnakeLength": snakeLength };
             $.ajax({
                 url: '/Snake/SaveGame',
-                dataType: "json",
-                data: game,
                 type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                dataType: "json",
+                data: JSON.stringify(game),
                 cache: false,
                 success: function () {
                     debugger;
