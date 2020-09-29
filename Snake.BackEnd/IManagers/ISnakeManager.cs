@@ -12,7 +12,7 @@ namespace Snake.BackEnd.IManagers
 
         List<Models.Snake> SetSnakeBody();
 
-        Game SetScore(GameDto game);
+        Game SetGame(GameDto game);
 
     }
 }

@@ -27,7 +27,7 @@ namespace Snake.BackEnd.Managers
             throw new NotImplementedException();
         }
 
-        public Game SetScore(GameDto game)
+        public Game SetGame(GameDto game)
         {
 
             var _game = new Game();
@@ -35,6 +35,10 @@ namespace Snake.BackEnd.Managers
             _game.Score = game.Score;
 
             _game.SnakeLength = game.SnakeLength;
+
+            _game.Apple.ApplePositionX = game.Apple.ApplePositionX;
+
+            _game.Apple.ApplePositionY = game.Apple.ApplePositionY;
 
             db.Game.Add(_game);
 

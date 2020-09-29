@@ -5,7 +5,8 @@ using System.Text;
 namespace Snake.BackEnd.Dtos
 {
     public class AppleDto
-    {
+    {   
+        public int ID { get; set; }
         public int ApplePositionX { get; set; }
         public int ApplePositionY { get; set; }
     }
