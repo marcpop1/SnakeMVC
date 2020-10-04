@@ -40,30 +40,10 @@
         $("#saveGameButton").on("click", function () {
             debugger;
 
-            var apple = { ApplePositionX: applePositionX, ApplePositionY: applePositionY };
+            
 
-            var game = {
-                Score: score,
-                SnakeLength: snakeLength,
-                Apple: apple
-            };
-            $.ajax({
-                url: '/Snake/SaveGame',
-                type: "POST",
-                contentType: 'application/json; charset=utf-8',
-                dataType: "json",
-                data: JSON.stringify(game),
-                cache: false,
-                success: function () {
-                    debugger;
-                    alert("Game Saved Successfully!");
-                    location.reload();
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert("Some error occurred");
-                    console.log(xhr, ajaxOptions, thrownError);
-                }
-            });
+            setGame();
+
         })
 
     });
@@ -400,6 +380,57 @@
         for (i = 0; i < snakeLength; i++) {
             
         }
+
+    }
+
+    function setGame() {
+
+        var game = {
+            Score: score,
+            SnakeLength: snakeLength,
+        };
+
+        $.ajax({
+            url: '/Snake/SaveGame',
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            data: JSON.stringify(game),
+            cache: false,
+            success: function () {
+                debugger;
+                alert("Game Saved Successfully!");
+                location.reload();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert("Some error occurred");
+                console.log(xhr, ajaxOptions, thrownError);
+            }
+        });
+
+    }
+
+    function setApple() {
+
+        var apple = { ApplePositionX: applePositionX, ApplePositionY: applePositionY };
+
+        $.ajax({
+            url: '/Snake/SaveGame',
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            dataType: "json",
+            data: JSON.stringify(apple),
+            cache: false,
+            success: function () {
+                debugger;
+                alert("Game Saved Successfully!");
+                location.reload();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert("Some error occurred");
+                console.log(xhr, ajaxOptions, thrownError);
+            }
+        });
 
     }
 

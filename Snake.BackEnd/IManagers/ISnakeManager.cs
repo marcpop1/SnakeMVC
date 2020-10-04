@@ -14,5 +14,9 @@ namespace Snake.BackEnd.IManagers
 
         Game SetGame(GameDto game);
 
+        Apple SetApple(AppleDto apple);
+
+        Models.Snake SetSnake(SnakeDto snake);
+
     }
 }

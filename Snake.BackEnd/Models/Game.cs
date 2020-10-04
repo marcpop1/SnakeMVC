@@ -10,6 +10,5 @@ namespace Snake.BackEnd.Models
         public int Score { get; set; }
         public int SnakeLength { get; set; }
 
-        public Apple Apple { get; set; }
     }
 }

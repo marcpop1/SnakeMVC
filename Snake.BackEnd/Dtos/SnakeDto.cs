@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Snake.BackEnd.Dtos
 {
-    public class GameDto
+    public class SnakeDto
     {
         public int ID { get; set; }
-        public int Score { get; set; }
-        public int SnakeLength { get; set; }
+        public int SnakeBodyPositionX { get; set; }
+        public int SnakeBodyPositionY { get; set; }
 
     }
 }

@@ -36,15 +36,44 @@ namespace Snake.BackEnd.Managers
 
             _game.SnakeLength = game.SnakeLength;
 
-            _game.Apple.ApplePositionX = game.Apple.ApplePositionX;
-
-            _game.Apple.ApplePositionY = game.Apple.ApplePositionY;
-
             db.Game.Add(_game);
 
             db.SaveChanges();
 
             return _game;
         } 
+
+        public Apple SetApple(AppleDto apple)
+        {
+
+            var _apple = new Apple();
+
+            _apple.ApplePositionX = apple.ApplePositionX;
+
+            _apple.ApplePositionY = apple.ApplePositionY;
+
+            db.Apple.Add(_apple);
+
+            db.SaveChanges();
+
+            return _apple;
+        }
+
+        public Models.Snake SetSnake(SnakeDto snake)
+        {
+
+            var _snake = new Models.Snake();
+
+            _snake.SnakeBodyPositionX = snake.SnakeBodyPositionX;
+
+            _snake.SnakeBodyPositionY = snake.SnakeBodyPositionY;
+
+            db.Snake.Add(_snake);
+
+            db.SaveChanges();
+
+            return _snake;
+        }
+
     }
 }
