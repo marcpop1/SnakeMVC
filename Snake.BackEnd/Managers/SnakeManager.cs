@@ -4,6 +4,8 @@ using System.Text;
 using Snake.BackEnd.IManagers;
 using Snake.BackEnd.Models;
 using Snake.BackEnd.Dtos;
+using System.Linq;
+using System.Threading.Tasks.Sources;
 
 namespace Snake.BackEnd.Managers
 {
@@ -80,6 +82,34 @@ namespace Snake.BackEnd.Managers
                 SetSnake(_snake[i]);
             }
 
+        }
+
+        public SaveGameDto LoadGame()
+        {
+
+            var _game = db.Game.First();
+
+            GameDto _gameDto = new GameDto(_game.Score, _game.SnakeLength);
+
+            var _apple = db.Apple.First();
+
+            AppleDto _appleDto = new AppleDto(_apple.ApplePositionX, _apple.ApplePositionY);
+
+            List<SnakeDto> _snakeDto = new List<SnakeDto>();
+
+            for (int i = 0; i < _game.SnakeLength; i++)
+            {
+                var _snake = db.Snake.Find(i);
+
+                _snakeDto[i].SnakeBodyPositionX = _snake.SnakeBodyPositionX;
+
+                _snakeDto[i].SnakeBodyPositionY = _snake.SnakeBodyPositionY;
+
+            }
+
+            SaveGameDto _savedGame = new SaveGameDto(_gameDto, _appleDto, _snakeDto);
+
+            return _savedGame; 
         }
 
         public void DeleteSavedGame()
