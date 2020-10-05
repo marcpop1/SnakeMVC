@@ -36,5 +36,10 @@ namespace SnakeMVC.Controllers
 
         }
 
+        public void DeleteSavedGame()
+        {
+            _snakeManager.DeleteSavedGame();
+        }
+
     }
 }

@@ -17,17 +17,7 @@ namespace Snake.BackEnd.Managers
             db = context;
         }
 
-        public List<Models.Snake> Get()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Models.Snake> SetSnakeBody()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetGame(GameDto game)
+        private void SetGame(GameDto game)
         {
 
             var _game = new Game();
@@ -42,7 +32,7 @@ namespace Snake.BackEnd.Managers
 
         } 
 
-        public void SetApple(AppleDto apple)
+        private void SetApple(AppleDto apple)
         {
 
             var _apple = new Apple();
@@ -57,7 +47,7 @@ namespace Snake.BackEnd.Managers
 
         }
 
-        public void SetSnake(SnakeDto snake)
+        private void SetSnake(SnakeDto snake)
         {
 
             var _snake = new Models.Snake();
@@ -89,6 +79,19 @@ namespace Snake.BackEnd.Managers
             {
                 SetSnake(_snake[i]);
             }
+
+        }
+
+        public void DeleteSavedGame()
+        {
+
+            db.Game.RemoveRange(db.Game);
+
+            db.Apple.RemoveRange(db.Apple);
+
+            db.Snake.RemoveRange(db.Snake);
+
+            db.SaveChanges();
 
         }
 

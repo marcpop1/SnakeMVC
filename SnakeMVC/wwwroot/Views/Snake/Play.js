@@ -5,6 +5,8 @@
 
     $('#submitButton').on("click", function () {
 
+        deleteSavedGame();
+
         snakeShowScore();
 
         createGrid(height, width);
@@ -507,6 +509,14 @@
             }
 
         }
+
+    }
+
+    function deleteSavedGame() {
+
+        $.ajax({
+            url: '/Snake/DeleteSavedGame'
+        });
 
     }
 
