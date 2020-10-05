@@ -25,12 +25,14 @@ namespace SnakeMVC.Controllers
 
         [Route("Snake/SaveGame")]
         [HttpPost]
-        public IActionResult SaveGame([FromBody] GameDto gameInput)
-        { 
+        public IActionResult SaveGame(string gameInput)
+        {
 
-            _snakeManager.SetGame(gameInput);
+            SaveGameDto _gameInput = Newtonsoft.Json.JsonConvert.DeserializeObject<SaveGameDto>(gameInput);
 
-            return Json(new { success = true});
+            _snakeManager.SaveGame(_gameInput);
+
+            return Json(new { success = true });
 
         }
 

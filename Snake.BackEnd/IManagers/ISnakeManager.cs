@@ -12,11 +12,13 @@ namespace Snake.BackEnd.IManagers
 
         List<Models.Snake> SetSnakeBody();
 
-        Game SetGame(GameDto game);
+        void SetGame(GameDto game);
 
-        Apple SetApple(AppleDto apple);
+        void SetApple(AppleDto apple);
 
-        Models.Snake SetSnake(SnakeDto snake);
+        void SetSnake(SnakeDto snake);
+
+        void SaveGame(SaveGameDto saveGame);
 
     }
 }

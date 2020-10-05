@@ -27,7 +27,7 @@ namespace Snake.BackEnd.Managers
             throw new NotImplementedException();
         }
 
-        public Game SetGame(GameDto game)
+        public void SetGame(GameDto game)
         {
 
             var _game = new Game();
@@ -40,10 +40,9 @@ namespace Snake.BackEnd.Managers
 
             db.SaveChanges();
 
-            return _game;
         } 
 
-        public Apple SetApple(AppleDto apple)
+        public void SetApple(AppleDto apple)
         {
 
             var _apple = new Apple();
@@ -56,10 +55,9 @@ namespace Snake.BackEnd.Managers
 
             db.SaveChanges();
 
-            return _apple;
         }
 
-        public Models.Snake SetSnake(SnakeDto snake)
+        public void SetSnake(SnakeDto snake)
         {
 
             var _snake = new Models.Snake();
@@ -72,7 +70,26 @@ namespace Snake.BackEnd.Managers
 
             db.SaveChanges();
 
-            return _snake;
+        }
+
+        public void SaveGame(SaveGameDto saveGame)
+        {
+
+            GameDto _game = saveGame.Game;
+
+            SetGame(_game);
+
+            AppleDto _apple = saveGame.Apple;
+
+            SetApple(_apple);
+
+            List<SnakeDto> _snake = saveGame.Snake;
+
+            for (int i = 0; i < saveGame.Game.SnakeLength; i++)
+            {
+                SetSnake(_snake[i]);
+            }
+
         }
 
     }

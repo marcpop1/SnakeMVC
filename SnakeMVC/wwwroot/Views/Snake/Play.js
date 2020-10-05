@@ -40,9 +40,7 @@
         $("#saveGameButton").on("click", function () {
             debugger;
 
-            
-
-            setGame();
+            saveCurrentGame();
 
         })
 
@@ -91,8 +89,14 @@
 
     var gameIsPaused = false;
 
+    var saveGame = {};
+
+    var game = {};
+
+    var apple = {};
+
     var snakeBodyPositionsXY = {};
-    var snakeBody = [];
+    var snake = [];
 
     // creates the grid with the (hardcoded) input values
     function createGrid(height, width) {
@@ -391,20 +395,19 @@
         };
 
         $.ajax({
-            url: '/Snake/SaveGame',
             type: "POST",
-            contentType: 'application/json; charset=utf-8',
-            dataType: "json",
-            data: JSON.stringify(game),
-            cache: false,
+            url: '/Snake/SaveGame',
+            dataType: "text",
+            data: { gameInput: JSON.stringify(game) },
             success: function () {
                 debugger;
                 alert("Game Saved Successfully!");
-                location.reload();
+                window.location.href = "/Snake/Play";
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert("Some error occurred");
                 console.log(xhr, ajaxOptions, thrownError);
+                window.location.href = "/Snake/Play";
             }
         });
 
@@ -431,6 +434,79 @@
                 console.log(xhr, ajaxOptions, thrownError);
             }
         });
+
+    }
+
+    function saveCurrentGame() {
+
+        game = {
+            Score: score,
+            SnakeLength: snakeLength,
+        }; 
+
+        apple = {
+            ApplePositionX: applePositionX,
+            ApplePositionY: applePositionY 
+        };
+
+        createSnakeArray();
+
+        saveGame = {
+            game: game,
+            apple: apple,
+            snake: snake
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/Snake/SaveGame',
+            dataType: "text",
+            data: { gameInput: JSON.stringify(saveGame) },
+            success: function () {
+                debugger;
+                alert("Game Saved Successfully!");
+                window.location.href = "/Snake/Play";
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert("Some error occurred");
+                console.log(xhr, ajaxOptions, thrownError);
+                window.location.href = "/Snake/Play";
+            }
+        });
+
+    }
+
+    function createSnakeArray() {
+
+        snakeBodyX = snakeHeadX;
+        snakeBodyY = snakeHeadY;
+
+        for (i = 2; i <= (snakeLength + 1); i++) {
+
+            snakeBodyX = checkLimit(snakeBodyX, width);
+            snakeBodyY = checkLimit(snakeBodyY, height);
+
+            snakeBodyPositionsXY = {
+                SnakeBodyPositionX: snakeBodyX,
+                SnakeBodyPositionY: snakeBodyY
+            }
+
+            snake.push(snakeBodyPositionsXY);
+
+            if ($('.gridRow.' + (checkLimit(snakeBodyY - 1, height)) + '').children('.gridCol.' + snakeBodyX + '').hasClass('snake s' + i + '')) {
+                snakeBodyY--;
+            }
+            else if ($('.gridRow.' + (checkLimit(snakeBodyY + 1, height)) + '').children('.gridCol.' + snakeBodyX + '').hasClass('snake s' + i + '')) {
+                snakeBodyY++;
+            }
+            else if ($('.gridRow.' + snakeBodyY + '').children('.gridCol.' + (checkLimit(snakeBodyX - 1, width)) + '').hasClass('snake s' + i + '')) {
+                snakeBodyX--;
+            }
+            else if ($('.gridRow.' + snakeBodyY + '').children('.gridCol.' + (checkLimit(snakeBodyX + 1, width)) + '').hasClass('snake s' + i + '')) {
+                snakeBodyX++;
+            }
+
+        }
 
     }
 
