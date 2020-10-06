@@ -2,8 +2,9 @@
     var height = $('#gridHeight').val();
     var width = $('#gridWidth').val();
 
-
+    debugger;
     $('#submitButton').on("click", function () {
+        debugger;
 
         deleteSavedGame();
 
@@ -28,6 +29,51 @@
                 moveSnakeNew(snakeCurrentDirection);
             }
         }, snakeMovementIntervalTime);
+
+        $(document).on("keydown", function (event) {
+            snakePauseGame();
+            showOrHidePauseModal();
+        });
+
+        $('#resumeButton').on('click', function () {
+            gameIsPaused = false;
+            showOrHidePauseModal();
+        });
+
+        $("#saveGameButton").on("click", function () {
+            debugger;
+
+            saveCurrentGame();
+
+        })
+
+    });
+
+    $('#loadGameButton').on("click", function () {
+        debugger;
+        loadGame();
+
+        snakeShowScore();
+
+        createGrid(height, width);
+        //spawnSnake();
+
+
+        //if (!isMoving) {
+        //    $(document).on("keydown", function (event) {
+        //        if (!isMoving) {
+        //            snakeController();
+        //        }
+        //    });
+        //}
+
+        appleRandomSpawn();
+
+        //snakeMovement = setInterval(function () {
+        //    if (!gameIsPaused) {
+        //        moveSnakeNew(snakeCurrentDirection);
+        //    }
+        //}, snakeMovementIntervalTime);
 
         $(document).on("keydown", function (event) {
             snakePauseGame();
@@ -381,64 +427,7 @@
         }
     }
 
-    function setSnakeBody() {
-
-        for (i = 0; i < snakeLength; i++) {
-            
-        }
-
-    }
-
-    function setGame() {
-
-        var game = {
-            Score: score,
-            SnakeLength: snakeLength,
-        };
-
-        $.ajax({
-            type: "POST",
-            url: '/Snake/SaveGame',
-            dataType: "text",
-            data: { gameInput: JSON.stringify(game) },
-            success: function () {
-                debugger;
-                alert("Game Saved Successfully!");
-                window.location.href = "/Snake/Play";
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert("Some error occurred");
-                console.log(xhr, ajaxOptions, thrownError);
-                window.location.href = "/Snake/Play";
-            }
-        });
-
-    }
-
-    function setApple() {
-
-        var apple = { ApplePositionX: applePositionX, ApplePositionY: applePositionY };
-
-        $.ajax({
-            url: '/Snake/SaveGame',
-            type: "POST",
-            contentType: 'application/json; charset=utf-8',
-            dataType: "json",
-            data: JSON.stringify(apple),
-            cache: false,
-            success: function () {
-                debugger;
-                alert("Game Saved Successfully!");
-                location.reload();
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert("Some error occurred");
-                console.log(xhr, ajaxOptions, thrownError);
-            }
-        });
-
-    }
-
+    // sets the game, apple, snake objects and creates the savegame object wich is sent through the ajax post call to the controller
     function saveCurrentGame() {
 
         game = {
@@ -478,6 +467,7 @@
 
     }
 
+    // creates the array containing the snake's body's positions
     function createSnakeArray() {
 
         snakeBodyX = snakeHeadX;
@@ -512,6 +502,17 @@
 
     }
 
+    var savedGame;
+
+    function loadGame() {
+
+        savedGame = $.getJSON('/Snake/LoadGame', function () {
+            alert("Success");
+        });
+
+    }
+
+    // calls the DeleteSavedGame method from the controller wich deletes the last saved game
     function deleteSavedGame() {
 
         $.ajax({

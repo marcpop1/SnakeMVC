@@ -37,11 +37,9 @@ namespace SnakeMVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult LoadGame()
+        public JsonResult LoadGame()
         {
-
-
-            return View("Play");
+            return Json(_snakeManager.LoadGame());
         }
 
         public void DeleteSavedGame()

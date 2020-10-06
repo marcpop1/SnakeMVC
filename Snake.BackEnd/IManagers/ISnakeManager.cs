@@ -10,7 +10,7 @@ namespace Snake.BackEnd.IManagers
     {
 
         void SaveGame(SaveGameDto saveGame);
-        void LoadGame();
+        SaveGameDto LoadGame();
         void DeleteSavedGame();
 
     }

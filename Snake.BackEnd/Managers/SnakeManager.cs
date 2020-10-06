@@ -97,13 +97,13 @@ namespace Snake.BackEnd.Managers
 
             List<SnakeDto> _snakeDto = new List<SnakeDto>();
 
+            var _snake = db.Snake.ToList();
+
             for (int i = 0; i < _game.SnakeLength; i++)
             {
-                var _snake = db.Snake.Find(i);
+                SnakeDto _snakeBody = new SnakeDto(_snake[i].SnakeBodyPositionX, _snake[i].SnakeBodyPositionY);
 
-                _snakeDto[i].SnakeBodyPositionX = _snake.SnakeBodyPositionX;
-
-                _snakeDto[i].SnakeBodyPositionY = _snake.SnakeBodyPositionY;
+                _snakeDto.Add(_snakeBody);
 
             }
 
