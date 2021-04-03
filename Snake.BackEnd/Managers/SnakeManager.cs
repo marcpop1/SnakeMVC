@@ -28,6 +28,8 @@ namespace Snake.BackEnd.Managers
 
             _game.SnakeLength = game.SnakeLength;
 
+            _game.SnakeDirection = game.SnakeDirection;
+
             db.Game.Add(_game);
 
             db.SaveChanges();
@@ -89,7 +91,7 @@ namespace Snake.BackEnd.Managers
 
             var _game = db.Game.First();
 
-            GameDto _gameDto = new GameDto(_game.Score, _game.SnakeLength);
+            GameDto _gameDto = new GameDto(_game.Score, _game.SnakeLength, _game.SnakeDirection);
 
             var _apple = db.Apple.First();
 
@@ -110,6 +112,59 @@ namespace Snake.BackEnd.Managers
             SaveGameDto _savedGame = new SaveGameDto(_gameDto, _appleDto, _snakeDto);
 
             return _savedGame; 
+        }
+
+        public GameDto LoadGameGame()
+        {
+
+            if (!db.Game.Any())
+            {
+                return null;
+            }
+
+            var _game = db.Game.First();
+
+            GameDto _gameDto = new GameDto(_game.Score, _game.SnakeLength, _game.SnakeDirection);
+
+            return _gameDto;
+        }
+
+        public AppleDto LoadGameApple()
+        {
+
+            if (!db.Apple.Any())
+            {
+                return null;
+            }
+
+            var _apple = db.Apple.First();
+
+            AppleDto _appleDto = new AppleDto(_apple.ApplePositionX, _apple.ApplePositionY);
+
+            return _appleDto;
+        }
+
+        public List<SnakeDto> LoadGameSnake()
+        {   
+
+            if (!db.Snake.Any())
+            {
+                return null;
+            }
+
+            List<SnakeDto> _snakeDto = new List<SnakeDto>();
+
+            var _snake = db.Snake.ToList();
+
+            for (int i = 0; i < db.Game.First().SnakeLength; i++)
+            {
+                SnakeDto _snakeBody = new SnakeDto(_snake[i].SnakeBodyPositionX, _snake[i].SnakeBodyPositionY);
+
+                _snakeDto.Add(_snakeBody);
+
+            }
+
+            return _snakeDto;
         }
 
         public void DeleteSavedGame()

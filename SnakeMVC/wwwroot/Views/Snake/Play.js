@@ -2,98 +2,6 @@
     var height = $('#gridHeight').val();
     var width = $('#gridWidth').val();
 
-    debugger;
-    $('#submitButton').on("click", function () {
-        debugger;
-
-        deleteSavedGame();
-
-        snakeShowScore();
-
-        createGrid(height, width);
-        spawnSnake();
-        
-
-        if (!isMoving) {
-            $(document).on("keydown", function (event) {
-                if (!isMoving) {
-                    snakeController();
-                }
-            });
-        }
-
-        appleRandomSpawn();
-
-        snakeMovement = setInterval(function () {
-            if (!gameIsPaused) {
-                moveSnakeNew(snakeCurrentDirection);
-            }
-        }, snakeMovementIntervalTime);
-
-        $(document).on("keydown", function (event) {
-            snakePauseGame();
-            showOrHidePauseModal();
-        });
-
-        $('#resumeButton').on('click', function () {
-            gameIsPaused = false;
-            showOrHidePauseModal();
-        });
-
-        $("#saveGameButton").on("click", function () {
-            debugger;
-
-            saveCurrentGame();
-
-        })
-
-    });
-
-    $('#loadGameButton').on("click", function () {
-        debugger;
-        loadGame();
-
-        snakeShowScore();
-
-        createGrid(height, width);
-        //spawnSnake();
-
-
-        //if (!isMoving) {
-        //    $(document).on("keydown", function (event) {
-        //        if (!isMoving) {
-        //            snakeController();
-        //        }
-        //    });
-        //}
-
-        appleRandomSpawn();
-
-        //snakeMovement = setInterval(function () {
-        //    if (!gameIsPaused) {
-        //        moveSnakeNew(snakeCurrentDirection);
-        //    }
-        //}, snakeMovementIntervalTime);
-
-        $(document).on("keydown", function (event) {
-            snakePauseGame();
-            showOrHidePauseModal();
-        });
-
-        $('#resumeButton').on('click', function () {
-            gameIsPaused = false;
-            showOrHidePauseModal();
-        });
-
-        $("#saveGameButton").on("click", function () {
-            debugger;
-
-            saveCurrentGame();
-
-        })
-
-    });
-
     var snakeHeadX = 12;
     var snakeHeadY = 12;
 
@@ -143,8 +51,114 @@
 
     var apple = {};
 
+    var snakeBodyPositionX;
+    var snakeBodyPositionY;
+
     var snakeBodyPositionsXY = {};
-    var snake = [];
+    var snakeBody = [
+        {
+            SnakeBodyPositionsX: -1,
+            SnakeBodyPositionsY: -1
+        }
+    ];
+
+    
+    $('#submitButton').on("click", function () {
+        
+        debugger;
+        deleteSavedGame();
+
+
+        createGrid(height, width);
+        debugger;
+        snakeShowScore();
+        spawnSnake();
+        
+
+        if (!isMoving) {
+            $(document).on("keydown", function (event) {
+                if (!isMoving) {
+                    snakeController();
+                }
+            });
+        }
+
+        appleRandomSpawn();
+
+        snakeMovement = setInterval(function () {
+            if (!gameIsPaused) {
+                moveSnakeNew(snakeCurrentDirection);
+            }
+        }, snakeMovementIntervalTime);
+
+        $(document).on("keydown", function (event) {
+            snakePauseGame();
+            showOrHidePauseModal();
+        });
+
+        $('#resumeButton').on('click', function () {
+            gameIsPaused = false;
+            showOrHidePauseModal();
+        });
+
+        $("#saveGameButton").on("click", function () {
+            debugger;
+            deleteSavedGame();
+            saveCurrentGame();
+
+        })
+
+    });
+
+    $('#loadGameButton').on("click", function () {
+
+
+        debugger;
+
+        createGrid(height, width);
+
+        loadGame();
+
+
+
+        if (!isMoving) {
+            $(document).on("keydown", function (event) {
+                if (!isMoving) {
+                    snakeController();
+                }
+            });
+        }
+
+        
+
+        snakeShowScore();
+
+        snakeMovement = setInterval(function () {
+            if (!gameIsPaused) {
+                moveSnakeNew(snakeCurrentDirection);
+            }
+        }, snakeMovementIntervalTime);
+
+        $(document).on("keydown", function (event) {
+            snakePauseGame();
+            showOrHidePauseModal();
+        });
+
+        $('#resumeButton').on('click', function () {
+            gameIsPaused = false;
+            showOrHidePauseModal();
+        });
+
+        $("#saveGameButton").on("click", function () {
+            debugger;
+            deleteSavedGame();
+            saveCurrentGame();
+
+        })
+
+    });
+
+    
 
     // creates the grid with the (hardcoded) input values
     function createGrid(height, width) {
@@ -166,14 +180,40 @@
 
     }
 
-    // spawns the snake with the body length of 4
+    // initializes the snake's body's positions with the default positions
+    function initializeSpawnSnake() {
+
+        //$('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake s1");
+        //$('.gridRow.13').children('.gridCol.12').addClass('snake s2');
+        //$('.gridRow.14').children('.gridCol.12').addClass('snake s3');
+        //$('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').addClass('snake s' + snakeLength + '');
+
+        snakeBodyPositionX = snakeHeadX;
+        snakeBodyPositionY = snakeHeadY;
+
+        for (i = 0; i < snakeLength; i++) {
+            snakeBodyPositionsXY = {
+                snakeBodyPositionsX: snakeBodyPositionX,
+                snakeBodyPositionsY: snakeBodyPositionY
+            }
+            snakeBody.push(snakeBodyPositionsXY);
+
+            snakeBodyPositionY++;
+
+        }
+
+    }
+    
+    // spawns the snake
     function spawnSnake() {
+        debugger;
+        if (snakeBody.length <= 1) {
+            initializeSpawnSnake();
+        }
 
-        $('.gridRow.' + snakeHeadY + '').children('.gridCol.' + snakeHeadX + '').addClass("snake s1");
-        $('.gridRow.13').children('.gridCol.12').addClass('snake s2');
-        $('.gridRow.14').children('.gridCol.12').addClass('snake s3');
-        $('.gridRow.' + snakeTailY + '').children('.gridCol.' + snakeTailX + '').addClass('snake s' + snakeLength + '');
-
+        for (i = 1; i <= snakeLength; i++) {
+            $('.gridRow.' + snakeBody[i].snakeBodyPositionsY + '').children('.gridCol.' + snakeBody[i].snakeBodyPositionsX + '').addClass('snake s' + i + '');
+        }
 
     }
 
@@ -203,6 +243,7 @@
         }
         else {
             alert("Game Over");
+            deleteSavedGame();
             location.reload();
             score = 0;
         }
@@ -214,7 +255,7 @@
     //performs the snakes movement
     function snakePerformMovement() {
 
-        
+        debugger;
 
         snakeHeadX = checkLimit(snakeHeadX, width);
         snakeHeadY = checkLimit(snakeHeadY, height);
@@ -387,9 +428,15 @@
         applePositionY = Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
+    // spawns the apple on the last saved game's position
+    function appleLoadSpawn() {
+
+        $('.gridRow.' + applePositionY + '').children('.gridCol.' + applePositionX + '').addClass('apple');
+
+    }
+
     // shows and updates the snake's score
     function snakeShowScore() {
-
         $('.score').remove();
         $("#main").append('<h1 class="text-center score">Score: ' + score + '</h1>');
 
@@ -433,6 +480,7 @@
         game = {
             Score: score,
             SnakeLength: snakeLength,
+            SnakeDirection: snakeCurrentDirection
         }; 
 
         apple = {
@@ -445,7 +493,7 @@
         saveGame = {
             game: game,
             apple: apple,
-            snake: snake
+            snake: snakeBody
         }
 
         $.ajax({
@@ -469,7 +517,8 @@
 
     // creates the array containing the snake's body's positions
     function createSnakeArray() {
-
+        snakeBody = [];
+        debugger;
         snakeBodyX = snakeHeadX;
         snakeBodyY = snakeHeadY;
 
@@ -483,7 +532,7 @@
                 SnakeBodyPositionY: snakeBodyY
             }
 
-            snake.push(snakeBodyPositionsXY);
+            snakeBody.push(snakeBodyPositionsXY);
 
             if ($('.gridRow.' + (checkLimit(snakeBodyY - 1, height)) + '').children('.gridCol.' + snakeBodyX + '').hasClass('snake s' + i + '')) {
                 snakeBodyY--;
@@ -499,15 +548,92 @@
             }
 
         }
-
+        debugger;
     }
 
-    var savedGame;
-
     function loadGame() {
-
-        savedGame = $.getJSON('/Snake/LoadGame', function () {
-            alert("Success");
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: "/Snake/LoadGameGame",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                debugger;
+                if (response != null) {
+                    score = response.score;
+                    snakeLength = response.snakeLength;
+                    snakeCurrentDirection = response.snakeDirection;
+                    snakeShowScore();
+                }
+                else {
+                    alert("Something went wrong");
+                    location.reload();
+                }
+            },
+            failure: function (response) {
+                alert("Failure");
+            },
+            error: function (response) {
+                alert("Error");
+            }
+        });
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: "/Snake/LoadGameApple",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                
+                if (response != null) {
+                    applePositionX = response.applePositionX;
+                    applePositionY = response.applePositionY;
+                    appleLoadSpawn();
+                }
+                else {
+                    alert("Something went wrong for apple");
+                }
+            },
+            failure: function (response) {
+                alert("Failure");
+            },
+            error: function (response) {
+                alert("Error");
+            }
+        });
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: "/Snake/LoadGameSnake",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null) {
+                    for (i = 0; i < snakeLength; i++) {
+                        snakeBodyPositionsXY = {
+                            snakeBodyPositionsX: response[i].snakeBodyPositionX,
+                            snakeBodyPositionsY: response[i].snakeBodyPositionY
+                        }
+                        snakeBody.push(snakeBodyPositionsXY);
+                    }
+                    debugger;
+                    snakeHeadX = response[0].snakeBodyPositionX;
+                    snakeHeadY = response[0].snakeBodyPositionY;
+                    snakeTailX = response[snakeLength - 1].snakeBodyPositionX;
+                    snakeTailY = response[snakeLength - 1].snakeBodyPositionY;
+                    spawnSnake();
+                }
+                else {
+                    alert("Something went wrong for snake");
+                }
+            },
+            failure: function (response) {
+                alert("Failure");
+            },
+            error: function (response) {
+                alert("Error");
+            }
         });
 
     }

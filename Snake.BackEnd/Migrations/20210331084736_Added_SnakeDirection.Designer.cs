@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Snake.BackEnd;
 
 namespace Snake.BackEnd.Migrations
 {
     [DbContext(typeof(SnakeDBContext))]
-    partial class SnakeDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210331084736_Added_SnakeDirection")]
+    partial class Added_SnakeDirection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

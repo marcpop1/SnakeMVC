@@ -13,7 +13,6 @@ namespace Snake.BackEnd.Dtos
             ApplePositionY = applePositioxY;
         }
 
-        public int ID { get; set; }
         public int ApplePositionX { get; set; }
         public int ApplePositionY { get; set; }
     }

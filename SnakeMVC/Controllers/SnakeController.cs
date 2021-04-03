@@ -39,9 +39,34 @@ namespace SnakeMVC.Controllers
         [HttpGet]
         public JsonResult LoadGame()
         {
-            return Json(_snakeManager.LoadGame());
+            var savedGame = _snakeManager.LoadGame();
+
+            return Json(savedGame);
         }
 
+        [HttpGet]
+        public JsonResult LoadGameGame()
+        {
+            var savedGame = _snakeManager.LoadGameGame();
+
+            return Json(savedGame);
+        }
+
+        [HttpGet]
+        public JsonResult LoadGameApple()
+        {
+            var savedApple = _snakeManager.LoadGameApple();
+
+            return Json(savedApple);
+        }
+
+        [HttpGet]
+        public JsonResult LoadGameSnake()
+        {
+            var savedSnake = _snakeManager.LoadGameSnake();
+
+            return Json(savedSnake);
+        }
         public void DeleteSavedGame()
         {
             _snakeManager.DeleteSavedGame();

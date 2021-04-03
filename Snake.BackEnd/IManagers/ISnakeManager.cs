@@ -11,6 +11,9 @@ namespace Snake.BackEnd.IManagers
 
         void SaveGame(SaveGameDto saveGame);
         SaveGameDto LoadGame();
+        GameDto LoadGameGame();
+        AppleDto LoadGameApple();
+        List<SnakeDto> LoadGameSnake();
         void DeleteSavedGame();
 
     }

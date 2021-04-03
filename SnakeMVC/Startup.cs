@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using Snake.BackEnd;
 using Snake.BackEnd.Managers;
 using Snake.BackEnd.IManagers;
+using Newtonsoft.Json;
+
 
 namespace SnakeMVC
 {
@@ -33,6 +35,7 @@ namespace SnakeMVC
             services.RegisterDataServices(Configuration);
 
             services.AddTransient<ISnakeManager, SnakeManager>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
